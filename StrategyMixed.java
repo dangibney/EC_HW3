@@ -9,7 +9,7 @@ import java.util.Random;
  */
 public class StrategyMixed extends Strategy{
 
-    int currentIteration;
+    int currentIteration = 0;
     int[] history;
     double[] strategy;
 

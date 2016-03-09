@@ -92,14 +92,8 @@ public class Search {
 	//	Problem Specific Setup - For new new fitness function problems, create
 	//	the appropriate class file (extending FitnessFunction.java) and add
 	//	an else_if block below to instantiate the problem.
- 
-		if (Parameters.problemType.equals("NM")){
-				problem = new NumberMatch();
-		}
-		else if (Parameters.problemType.equals("OM")){
-				problem = new OneMax();
-		}
-		else System.out.println("Invalid Problem Type");
+
+        problem = new PrisonersTournament();
 
 		System.out.println(problem.name);
 
@@ -380,6 +374,8 @@ public class Search {
 		dateAndTime = Calendar.getInstance(); 
 		Date endTime = dateAndTime.getTime();
 		System.out.println("End  :  " + endTime);
+
+        System.out.println(bestOfRunChromo);
 
 	} // End of Main Class
 
