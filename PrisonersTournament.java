@@ -12,20 +12,23 @@ public class PrisonersTournament extends FitnessFunction{
     // gene size = 2 ^ (iterationsRemembered * 2)
     int iterationsRemembered = 4;
 
-
+    // iterations in a game
     int maxNumberOfIterations = 200;
 
     // comes from cooperate, cooperate
     int bestScorePossible = 7;
 
+    // number of times to repeat suite of games
     int suiteIterations = 10;
 
+    // weights for the different game types
     int randomWeight = 1;
     int cooperateWeight = 1;
     int defectWeight = 1;
     int titForTatWeight = 10;
     int bestFoundWeight = 1;
 
+    PrisonersTournament() { name = "Iterated Prisoner's Dilemma"; }
 //  COMPUTE A CHROMOSOME'S RAW FITNESS *************************************
 
     public void doRawFitness(Chromo X){
@@ -54,15 +57,15 @@ public class PrisonersTournament extends FitnessFunction{
 
     /*
     Number of iterations to play is chosen randomly.
-    Returns an integer giving the ratio of the points scored over the
+    Returns an integer less than 100, giving the ratio of the points scored over the
     maximum number of number of points possible.
      */
     private int play(Strategy p1, Strategy p2){
         IteratedPD ipd = new IteratedPD(p1, p2);
-        int iterations = Search.r.nextInt(maxNumberOfIterations);
+        int iterations = Search.r.nextInt(maxNumberOfIterations) + 1;
         //int iterations = 100;
         ipd.runSteps(iterations);
-        return (int) (100.00 * ((double)ipd.player1Score() / (double)(iterations * bestScorePossible + 1)));
+        return (int) (100.00 * ((double)ipd.player1Score() / (double)(iterations * bestScorePossible)));
     }
 
 }
