@@ -342,6 +342,13 @@ public class Search {
 					Chromo.copyB2A(member[i], child[i]);
 				}
 
+                // added elitism
+                // best from last generation added to new generation
+                // randomly replaces some other new member
+                if(Parameters.elitism == 1) {
+                    int randIndex = r.nextInt(Parameters.popSize);
+                    Chromo.copyB2A(bestOfGenChromo, member[randIndex]);
+                }
 			} //  Repeat the above loop for each generation
 
 			Hwrite.left(bestOfRunR, 4, summaryOutput);
