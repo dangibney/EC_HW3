@@ -13,12 +13,12 @@ public class Chromo {
     public double sclFitness;
     public double proFitness;
 
+    private double mutationSD = .1;
     /*******************************************************************************
      *                            INSTANCE VARIABLES                                *
      *******************************************************************************/
 
     private static double randnum;
-
     /*******************************************************************************
      *                              CONSTRUCTORS                                    *
      *******************************************************************************/
@@ -57,16 +57,19 @@ public class Chromo {
 
         switch (Parameters.mutationType){
 
-            case 1:     //  Swap two values in chromo
+            case 1:     // guassian mutation to genes
 
-                randnum = Search.r.nextDouble();
-                if (randnum < Parameters.mutationRate){
-                    int index1 = Search.r.nextInt(Parameters.geneSize);
-                    int index2 = Search.r.nextInt(Parameters.geneSize);
+                // for each gene in the chromo
+                for(int i = 0; i < chromo.length; i++) {
+                    randnum = Search.r.nextDouble();
+                    if (randnum < Parameters.mutationRate) {
+                        // modify current gene value by some amount chosen from a normal distribution
+                        chromo[i] += (Search.r.nextGaussian() * mutationSD);
 
-                    double temp = chromo[index1];
-                    chromo[index1] = chromo[index2];
-                    chromo[index2] = temp;
+                        // don't allow probabilities stored in chromo to go less that 0 or greater than 1
+                        if(chromo[i] < 0) chromo[i] = 0;
+                        else if(chromo[i] > 1) chromo[i] = 1;
+                    }
                 }
             break;
 
