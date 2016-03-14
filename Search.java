@@ -343,12 +343,21 @@ public class Search {
 				}
 
                 // added elitism
-                // best from last generation added to new generation
+                // best chromo from last generation added to new generation
                 // randomly replaces some other new member
                 if(Parameters.elitism == 1) {
                     int randIndex = r.nextInt(Parameters.popSize);
                     Chromo.copyB2A(bestOfGenChromo, member[randIndex]);
                 }
+
+                // Use this print statement to analyze the probability stored at a particular index.
+                // Expected mode-indices of 'good' players and their probabilities:
+                // Always cooperate: 170, Pr: 0 (you should always defect)
+                // Always defect: 0, Pr: 0 (you should always defect)
+                // Tit-for-tat: 255, Pr: 1 (you should always cooperate)
+
+                //System.out.println(bestOfRunChromo.chromo[255]);
+
 			} //  Repeat the above loop for each generation
 
 			Hwrite.left(bestOfRunR, 4, summaryOutput);

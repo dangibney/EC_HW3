@@ -39,8 +39,6 @@ public class PrisonersTournament extends FitnessFunction{
         StrategyMixed player1 = new StrategyMixed(iterationsRemembered);
         player1.setStrategy(X.chromo);
 
-        //Strategy player1 = new StrategyTitForTat();
-
         // tournament suite
         for(int i = 0; i < suiteIterations; i++) {
             X.rawFitness += randomWeight * play(player1, new StrategyRandom());
@@ -52,6 +50,9 @@ public class PrisonersTournament extends FitnessFunction{
             StrategyMixed player2 = new StrategyMixed(iterationsRemembered);
             player2.setStrategy(Search.bestOfRunChromo.chromo);
             X.rawFitness += bestFoundWeight * play(player1, player2);
+
+            // Use this print statement to analyze the most frequently used(mode) strategy index.
+            //System.out.println("suite iteration: " + i + " player1 mode strategy index: " + player1.getModeStrategyIndex());
         }
     }
 

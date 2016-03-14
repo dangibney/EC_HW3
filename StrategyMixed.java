@@ -10,20 +10,26 @@ import java.util.Random;
 public class StrategyMixed extends Strategy{
 
     int currentIteration = 0;
+    int numberOfStrategyIndices;
     int[] history;
     double[] strategy;
+
+    // added for analysis
+    private int[] strategyIndexFrequency;
 
     public StrategyMixed(int numberOfIterationsRemembered){
         name = "Mixed Strategy";
 
         // "* 2" because each iterations has a move for player1 and player2
         history = new int[numberOfIterationsRemembered * 2];
-
+        numberOfStrategyIndices = (int)Math.pow(2,history.length);
         // 0 = defect, 1 = cooperate
         opponentLastMove = 1;
 
         // TODO: replace with GA found strategy
-        initializeWithRandomMixedStrategy();
+        //initializeWithRandomMixedStrategy();
+
+        strategyIndexFrequency = new int[numberOfStrategyIndices];
 
         //System.out.println("Strategy: " + Arrays.toString(strategy));
         //System.out.println("History: " + Arrays.toString(history));
@@ -35,7 +41,7 @@ public class StrategyMixed extends Strategy{
 
         // each entry in the history is a 0 or 1, making the number of possible histories 2^|h|
         // we should have a strategy for history
-        if(s.length != (int)Math.pow(2,history.length)){
+        if(s.length != numberOfStrategyIndices){
             System.out.println("Invalid strategy based on history length");
             System.out.println("History length: " + history.length);
             System.out.println("Strategy length: " + s.length);
@@ -59,6 +65,9 @@ public class StrategyMixed extends Strategy{
             // get strategy index from current history of game
             int index = getIndex();
             //System.out.println("index: "+ index);
+
+            // added for analysis
+            strategyIndexFrequency[index]++;
 
             // draw random double
             Random rand = new Random();
@@ -110,11 +119,21 @@ public class StrategyMixed extends Strategy{
     }
 
     public void initializeWithRandomMixedStrategy(){
-        strategy = new double[(int)Math.pow(2,history.length)];
+        strategy = new double[numberOfStrategyIndices];
         Random rand = new Random();
 
         for(int i = 0; i < strategy.length; i++){
             strategy[i] = rand.nextDouble();
         }
+    }
+
+    public int getModeStrategyIndex(){
+        int topIndex = 0;
+        for(int i = 0; i < numberOfStrategyIndices; i++){
+            if(strategyIndexFrequency[i] > strategyIndexFrequency[topIndex]){
+                topIndex = i;
+            }
+        }
+        return topIndex;
     }
 }
