@@ -2,14 +2,14 @@ Experiment ID                :PrisonersTournament
 Problem Type                 :PT
 Data Input File Name         :
 Number of Runs               :10
-Generations per Run          :100
-Population Size              :300
+Generations per Run          :50
+Population Size              :100
 Selection Method (1)         :2
 Fitness Scaling Type (2)     :0
 Crossover Type (3)           :1
 Crossover Rate (4)           :0.8
 Mutation Type (5)            :1
-Mutation Rate (6)            :.005
+Mutation Rate (6)            :.01
 Random Number Seed           :75982
 Number of Genes/Points (7)   :8
 Size of Genes (18)           :256

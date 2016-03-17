@@ -13,7 +13,7 @@ public class PrisonersTournament extends FitnessFunction{
     int iterationsRemembered = 4;
 
     // iterations in a game
-    int maxNumberOfIterations = 200;
+    int maxNumberOfIterations = 150;
 
     // comes from cooperate, cooperate
     int bestScorePossible = 7;
@@ -25,8 +25,9 @@ public class PrisonersTournament extends FitnessFunction{
     int randomWeight = 1;
     int cooperateWeight = 1;
     int defectWeight = 1;
-    int titForTatWeight = 10;
+    int titForTatWeight = 1;
     int bestFoundWeight = 1;
+    int againstEveryoneWeight = 1;
 
     PrisonersTournament() { name = "Iterated Prisoner's Dilemma"; }
 //  COMPUTE A CHROMOSOME'S RAW FITNESS *************************************
@@ -41,19 +42,42 @@ public class PrisonersTournament extends FitnessFunction{
 
         // tournament suite
         for(int i = 0; i < suiteIterations; i++) {
-            X.rawFitness += randomWeight * play(player1, new StrategyRandom());
-            X.rawFitness += titForTatWeight * play(player1, new StrategyTitForTat());
-            X.rawFitness += cooperateWeight * play(player1, new StrategyAlwaysCooperate());
-            X.rawFitness += defectWeight * play(player1, new StrategyAlwaysDefect());
+            /*
+            int sum = 0;
+            sum += randomWeight * play(player1, new StrategyRandom());
+            sum += titForTatWeight * play(player1, new StrategyTitForTat());
+            sum += cooperateWeight * play(player1, new StrategyAlwaysCooperate());
+            sum += defectWeight * play(player1, new StrategyAlwaysDefect());
+            X.rawFitness += Math.round(sum / (double)(randomWeight + titForTatWeight + cooperateWeight + defectWeight));
+            */
 
             // and play best found so far
+            /*
             StrategyMixed player2 = new StrategyMixed(iterationsRemembered);
             player2.setStrategy(Search.bestOfRunChromo.chromo);
             X.rawFitness += bestFoundWeight * play(player1, player2);
+            */
+
+
+            // and play against everyone in the population
+            int sum = 0;
+            for(Chromo c : Search.member){
+                StrategyMixed player3 = new StrategyMixed(iterationsRemembered);
+                player3.setStrategy(c.chromo);
+                sum += againstEveryoneWeight * play(player1, player3);
+            }
+
+            X.rawFitness += Math.round(sum / (double)Parameters.popSize);
+
 
             // Use this print statement to analyze the most frequently used(mode) strategy index.
             //System.out.println("suite iteration: " + i + " player1 mode strategy index: " + player1.getModeStrategyIndex());
         }
+
+        // average across suite iteration
+        X.rawFitness = Math.round(X.rawFitness / (double)suiteIterations);
+
+        //System.out.println(player1.getModeStrategyIndex() + "\t\t\t" + player1.strategy[player1.getModeStrategyIndex()]);
     }
 
     /*
@@ -66,7 +90,8 @@ public class PrisonersTournament extends FitnessFunction{
         int iterations = Search.r.nextInt(maxNumberOfIterations) + 1;
         //int iterations = 100;
         ipd.runSteps(iterations);
-        return (int) (100.00 * ((double)ipd.player1Score() / (double)(iterations * bestScorePossible)));
+        //return ipd.player1Score();
+        return (int) (1000.00 * ((double)ipd.player1Score() / (double)(iterations * bestScorePossible)));
     }
 
 }
