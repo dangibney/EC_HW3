@@ -9,6 +9,7 @@ public class Chromo {
      *******************************************************************************/
 
     public double[] chromo;
+    public int index;
     public double rawFitness;
     public double sclFitness;
     public double proFitness;
@@ -84,14 +85,17 @@ public class Chromo {
 
     //  Select a parent for crossover ******************************************
 
-    public static int selectParent(){
+    public static int selectParent(int indexPosition){
 
         double rWheel = 0;
         int j = 0;
 
+        int popSize = Parameters.popSize/2;
+        int positionAdjustment = indexPosition> popSize ? popSize : 0;
         switch (Parameters.selectType){
 
             case 1:     // Proportional Selection
+                //Does not support dual populations
                 randnum = Search.r.nextDouble();
                 for (j=0; j<Parameters.popSize; j++){
                     rWheel = rWheel + Search.member[j].proFitness;
@@ -102,8 +106,8 @@ public class Chromo {
             case 2:     //  Tournament Selection
 
                 // get two possible parents
-                int possibleParent1 = Search.r.nextInt(Parameters.popSize);
-                int possibleParent2 = Search.r.nextInt(Parameters.popSize);
+                int possibleParent1 = Search.r.nextInt(popSize)+positionAdjustment;
+                int possibleParent2 = Search.r.nextInt(popSize)+positionAdjustment;
 
                 // get their fitness level
                 int fitterParent = (Search.member[possibleParent1].proFitness >=

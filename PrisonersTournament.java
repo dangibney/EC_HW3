@@ -25,7 +25,7 @@ public class PrisonersTournament extends FitnessFunction{
     int randomWeight = 1;
     int cooperateWeight = 1;
     int defectWeight = 1;
-    int titForTatWeight = 10;
+    int titForTatWeight = 1;
     int bestFoundWeight = 1;
 
     PrisonersTournament() { name = "Iterated Prisoner's Dilemma"; }
@@ -38,17 +38,21 @@ public class PrisonersTournament extends FitnessFunction{
         // use chromo as strategy
         StrategyMixed player1 = new StrategyMixed(iterationsRemembered);
         player1.setStrategy(X.chromo);
-
+        int popSize= Parameters.popSize/2;
         // tournament suite
-        for(int i = 0; i < suiteIterations; i++) {
-            X.rawFitness += randomWeight * play(player1, new StrategyRandom());
-            X.rawFitness += titForTatWeight * play(player1, new StrategyTitForTat());
-            X.rawFitness += cooperateWeight * play(player1, new StrategyAlwaysCooperate());
-            X.rawFitness += defectWeight * play(player1, new StrategyAlwaysDefect());
+        int adjust = X.index<popSize ? popSize : 0;
+
+        for(int i = 0; i < popSize; i++) {
+
+           // X.rawFitness += randomWeight * play(player1, new StrategyRandom());
+           // X.rawFitness += titForTatWeight * play(player1, new StrategyTitForTat());
+           // X.rawFitness += cooperateWeight * play(player1, new StrategyAlwaysCooperate());
+          //  X.rawFitness += defectWeight * play(player1, new StrategyAlwaysDefect());
 
             // and play best found so far
             StrategyMixed player2 = new StrategyMixed(iterationsRemembered);
-            player2.setStrategy(Search.bestOfRunChromo.chromo);
+            Chromo opponentChromo= Search.member[i+adjust];
+            player2.setStrategy(opponentChromo.chromo);
             X.rawFitness += bestFoundWeight * play(player1, player2);
 
             // Use this print statement to analyze the most frequently used(mode) strategy index.

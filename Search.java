@@ -145,7 +145,7 @@ public class Search {
 					member[i].rawFitness = 0;
 					member[i].sclFitness = 0;
 					member[i].proFitness = 0;
-
+					member[i].index=i;
 					problem.doRawFitness(member[i]);
 
 					sumRawFitness = sumRawFitness + member[i].rawFitness;
@@ -315,10 +315,10 @@ public class Search {
 				for (int i=0; i<Parameters.popSize; i=i+2){
 
 					//	Select Two Parents
-					parent1 = Chromo.selectParent();
+					parent1 = Chromo.selectParent(i);
 					parent2 = parent1;
 					while (parent2 == parent1){
-						parent2 = Chromo.selectParent();
+						parent2 = Chromo.selectParent(i);
 					}
 
 					//	Crossover Two Parents to Create Two Children
