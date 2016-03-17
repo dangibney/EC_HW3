@@ -58,6 +58,7 @@ public class PrisonersTournament extends FitnessFunction{
             // Use this print statement to analyze the most frequently used(mode) strategy index.
             //System.out.println("suite iteration: " + i + " player1 mode strategy index: " + player1.getModeStrategyIndex());
         }
+        X.rawFitness = X.rawFitness/popSize;
     }
 
     /*
