@@ -391,7 +391,7 @@ public class Search {
 		Date endTime = dateAndTime.getTime();
 		System.out.println("End  :  " + endTime);
 
-        System.out.println(bestOfRunChromo);
+        System.out.println("Suggested Contest Entry: \n"+bestOverAllChromo);
 
 	} // End of Main Class
 
