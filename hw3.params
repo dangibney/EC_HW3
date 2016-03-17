@@ -3,7 +3,7 @@ Problem Type                 :PT
 Data Input File Name         :
 Number of Runs               :10
 Generations per Run          :100
-Population Size              :20
+Population Size              :40
 Selection Method (1)         :2
 Fitness Scaling Type (2)     :0
 Crossover Type (3)           :1
