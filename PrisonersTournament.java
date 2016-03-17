@@ -19,7 +19,7 @@ public class PrisonersTournament extends FitnessFunction{
     int bestScorePossible = 7;
 
     // number of times to repeat suite of games
-    int suiteIterations = 10;
+    int suiteIterations = 1;
 
     // weights for the different game types
     int randomWeight = 1;
