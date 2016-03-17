@@ -1,7 +1,7 @@
 Experiment ID                :PrisonersTournament
 Problem Type                 :PT
 Data Input File Name         :
-Number of Runs               :10
+Number of Runs               :1
 Generations per Run          :100
 Population Size              :20
 Selection Method (1)         :2
