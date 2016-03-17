@@ -42,6 +42,7 @@ public class PrisonersTournament extends FitnessFunction{
         // tournament suite
         int adjust = X.index<popSize ? popSize : 0;
         for (int suiteIteration =0; suiteIteration < suiteIterations; suiteIteration++) {
+            int sum=0;
             for (int i = 0; i < popSize; i++) {
 
                 // X.rawFitness += randomWeight * play(player1, new StrategyRandom());
@@ -53,12 +54,12 @@ public class PrisonersTournament extends FitnessFunction{
                 StrategyMixed player2 = new StrategyMixed(iterationsRemembered);
                 Chromo opponentChromo = Search.member[i + adjust];
                 player2.setStrategy(opponentChromo.chromo);
-                X.rawFitness += bestFoundWeight * play(player1, player2);
+                sum += bestFoundWeight * play(player1, player2);
 
                 // Use this print statement to analyze the most frequently used(mode) strategy index.
                 //System.out.println("suite iteration: " + i + " player1 mode strategy index: " + player1.getModeStrategyIndex());
             }
-            X.rawFitness = X.rawFitness / popSize;
+            X.rawFitness+= sum/ popSize;
         }
         X.rawFitness = X.rawFitness / suiteIterations;
     }
@@ -73,7 +74,7 @@ public class PrisonersTournament extends FitnessFunction{
         int iterations = Search.r.nextInt(maxNumberOfIterations) + 1;
         //int iterations = 100;
         ipd.runSteps(iterations);
-        return (int) (1000.00 * ((double)ipd.player1Score() / (double)(iterations * bestScorePossible)));
+        return (int) (1000.00 * ((double)(ipd.player1Score()+ipd.player2Score()) / (double)(iterations * 2 * bestScorePossible)));
     }
 
 }
