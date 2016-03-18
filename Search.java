@@ -39,8 +39,15 @@ public class Search {
 	public static double defaultBest;
 	public static double defaultWorst;
 
+	//added to monitor combined game fitness
+    public static double sumRawCombinedGameFitness;
+    public static double sumRawCombinedGameFitness2;
+
 	public static double averageRawFitness;
 	public static double stdevRawFitness;
+
+    public static double averageRawCombinedFitness;
+    public static double stdevRawCombinedFitness;
 
 	public static int G;
 	public static int R;
@@ -139,18 +146,26 @@ public class Search {
 				sumRawFitness2 = 0;
 				bestOfGenChromo.rawFitness = defaultBest;
 
+                sumRawCombinedGameFitness = 0;
+
 				//	Test Fitness of Each Member
 				for (int i=0; i<Parameters.popSize; i++){
 
 					member[i].rawFitness = 0;
 					member[i].sclFitness = 0;
 					member[i].proFitness = 0;
+                    member[i].combinedGameRawFitness = 0;
 
 					problem.doRawFitness(member[i]);
 
 					sumRawFitness = sumRawFitness + member[i].rawFitness;
 					sumRawFitness2 = sumRawFitness2 +
 						member[i].rawFitness * member[i].rawFitness;
+
+                    sumRawCombinedGameFitness = sumRawCombinedGameFitness + member[i].combinedGameRawFitness;
+                    sumRawCombinedGameFitness2 = sumRawCombinedGameFitness2 +
+                            member[i].combinedGameRawFitness * member[i].combinedGameRawFitness;
+
 
 					if (Parameters.minORmax.equals("max")){
 						if (member[i].rawFitness > bestOfGenChromo.rawFitness){
@@ -193,6 +208,8 @@ public class Search {
 				fitnessStats[1][G] += bestOfGenChromo.rawFitness;
 
 				averageRawFitness = sumRawFitness / Parameters.popSize;
+                averageRawCombinedFitness = sumRawCombinedGameFitness / Parameters.popSize;
+
 				stdevRawFitness = Math.sqrt(
 							Math.abs(sumRawFitness2 - 
 							sumRawFitness*sumRawFitness/Parameters.popSize)
@@ -200,8 +217,19 @@ public class Search {
 							(Parameters.popSize-1)
 							);
 
+                stdevRawCombinedFitness = Math.sqrt(
+                        Math.abs(sumRawCombinedGameFitness2 -
+                                sumRawCombinedGameFitness*sumRawCombinedGameFitness/Parameters.popSize)
+                                /
+                                (Parameters.popSize-1)
+                );
+
 				// Output generation statistics to screen
-				System.out.println(R + "\t" + G +  "\t" + (int)bestOfGenChromo.rawFitness + "\t" + averageRawFitness + "\t" + stdevRawFitness);
+				System.out.println(R + "\t" + G +  "\t" + (int)bestOfGenChromo.rawFitness
+                        + "\t" + averageRawFitness
+                        + "\t" + stdevRawFitness
+                        + "\t" + averageRawCombinedFitness
+                        + "\t" + stdevRawCombinedFitness);
 
 				// Output generation statistics to summary file
 				summaryOutput.write(" R ");

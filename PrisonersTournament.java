@@ -17,9 +17,10 @@ public class PrisonersTournament extends FitnessFunction{
 
     // comes from cooperate, cooperate
     int bestScorePossible = 7;
+    int bestCombinedScorePossible = 10;
 
     // number of times to repeat suite of games
-    int suiteIterations = 10;
+    int suiteIterations = 1;
 
     // weights for the different game types
     int randomWeight = 1;
@@ -27,7 +28,6 @@ public class PrisonersTournament extends FitnessFunction{
     int defectWeight = 1;
     int titForTatWeight = 1;
     int bestFoundWeight = 1;
-    int againstEveryoneWeight = 1;
 
     PrisonersTournament() { name = "Iterated Prisoner's Dilemma"; }
 //  COMPUTE A CHROMOSOME'S RAW FITNESS *************************************
@@ -60,15 +60,18 @@ public class PrisonersTournament extends FitnessFunction{
 
 
             // and play against everyone in the population
-            int sum = 0;
+            int individualSum = 0;
+            int combinedSum = 0;
             for(Chromo c : Search.member){
                 StrategyMixed player3 = new StrategyMixed(iterationsRemembered);
                 player3.setStrategy(c.chromo);
-                sum += againstEveryoneWeight * play(player1, player3);
+                int[] results = play(player1, player3);
+                individualSum += results[0];
+                combinedSum += results[1];
             }
 
-            X.rawFitness += Math.round(sum / (double)Parameters.popSize);
-
+            X.rawFitness += Math.round(individualSum / (double)Parameters.popSize);
+            X.combinedGameRawFitness += Math.round(combinedSum / (double)Parameters.popSize);
 
             // Use this print statement to analyze the most frequently used(mode) strategy index.
             //System.out.println("suite iteration: " + i + " player1 mode strategy index: " + player1.getModeStrategyIndex());
@@ -76,6 +79,7 @@ public class PrisonersTournament extends FitnessFunction{
 
         // average across suite iteration
         X.rawFitness = Math.round(X.rawFitness / (double)suiteIterations);
+        X.combinedGameRawFitness = Math.round(X.combinedGameRawFitness/ (double)suiteIterations);
 
         //System.out.println(player1.getModeStrategyIndex() + "\t\t\t" + player1.strategy[player1.getModeStrategyIndex()]);
     }
@@ -85,13 +89,16 @@ public class PrisonersTournament extends FitnessFunction{
     Returns an integer less than 100, giving the ratio of the points scored over the
     maximum number of number of points possible.
      */
-    private int play(Strategy p1, Strategy p2){
+    private int[] play(Strategy p1, Strategy p2){
         IteratedPD ipd = new IteratedPD(p1, p2);
         int iterations = Search.r.nextInt(maxNumberOfIterations) + 1;
         //int iterations = 100;
         ipd.runSteps(iterations);
         //return ipd.player1Score();
-        return (int) (1000.00 * ((double)ipd.player1Score() / (double)(iterations * bestScorePossible)));
+        int[] results = new int[2];
+        results[0] = (int) (1000.00 * ((double)ipd.player1Score() / (double)(iterations * bestScorePossible)));
+        results[1] = (int) (1000.00 * ((double)(ipd.player1Score() + ipd.player2Score()) / (double)(iterations * bestCombinedScorePossible)));
+        return results;
     }
 
 }

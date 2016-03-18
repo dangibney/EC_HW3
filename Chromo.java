@@ -12,6 +12,7 @@ public class Chromo {
     public double rawFitness;
     public double sclFitness;
     public double proFitness;
+    public double combinedGameRawFitness;
 
     private double mutationSD = .1;
     /*******************************************************************************
@@ -35,6 +36,7 @@ public class Chromo {
         this.rawFitness = -1;   //  Fitness not yet evaluated
         this.sclFitness = -1;   //  Fitness not yet scaled
         this.proFitness = -1;   //  Fitness not yet proportionalized
+        this.combinedGameRawFitness = -1; // Fitness not yet evaluated
     }
 
 
@@ -133,14 +135,12 @@ public class Chromo {
 
     public static void mateParents(int pnum1, int pnum2, Chromo parent1, Chromo parent2, Chromo child1, Chromo child2){
 
-        int xoverPoint1;
-
         switch (Parameters.xoverType){
 
             case 1:     //  Single Point Crossover
 
                 //  Select crossover point
-                xoverPoint1 = Search.r.nextInt(Parameters.geneSize);
+                int xoverPoint1 = Search.r.nextInt(Parameters.geneSize);
 
                 //  Create child chromosome from parental material
                for(int i = 0; i < Parameters.geneSize; i++){
@@ -166,9 +166,11 @@ public class Chromo {
         child1.rawFitness = -1;   //  Fitness not yet evaluated
         child1.sclFitness = -1;   //  Fitness not yet scaled
         child1.proFitness = -1;   //  Fitness not yet proportionalized
+        child1.combinedGameRawFitness = -1;
         child2.rawFitness = -1;   //  Fitness not yet evaluated
         child2.sclFitness = -1;   //  Fitness not yet scaled
         child2.proFitness = -1;   //  Fitness not yet proportionalized
+        child2.combinedGameRawFitness = -1;
     }
 
     //  Produce a new child from a single parent  ******************************
@@ -182,6 +184,7 @@ public class Chromo {
         child.rawFitness = -1;   //  Fitness not yet evaluated
         child.sclFitness = -1;   //  Fitness not yet scaled
         child.proFitness = -1;   //  Fitness not yet proportionalized
+        child.combinedGameRawFitness = -1;
     }
 
     //  Copy one chromosome to another  ***************************************
@@ -193,12 +196,16 @@ public class Chromo {
         targetA.rawFitness = sourceB.rawFitness;
         targetA.sclFitness = sourceB.sclFitness;
         targetA.proFitness = sourceB.proFitness;
+        targetA.combinedGameRawFitness = sourceB.combinedGameRawFitness;
         return;
     }
 
     @Override
     public String toString(){
-        String out = "";
+        String out = "Array form:\n"
+                + Arrays.toString(chromo)
+                +"\nExplicitly indexed form:\n";
+
         for(int i = 0; i < chromo.length; i++){
             out += i+ " : " + chromo[i] + ", ";
         }
