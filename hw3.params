@@ -1,8 +1,8 @@
 Experiment ID                :PrisonersTournament
 Problem Type                 :PT
 Data Input File Name         :
-Number of Runs               :100
-Generations per Run          :100
+Number of Runs               :50
+Generations per Run          :50
 Population Size              :100
 Selection Method (1)         :2
 Fitness Scaling Type (2)     :0
