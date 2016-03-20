@@ -42,14 +42,14 @@ public class PrisonersTournament extends FitnessFunction{
 
         // tournament suite
         for(int i = 0; i < suiteIterations; i++) {
-            /*
-            int sum = 0;
-            sum += randomWeight * play(player1, new StrategyRandom());
-            sum += titForTatWeight * play(player1, new StrategyTitForTat());
-            sum += cooperateWeight * play(player1, new StrategyAlwaysCooperate());
-            sum += defectWeight * play(player1, new StrategyAlwaysDefect());
-            X.rawFitness += Math.round(sum / (double)(randomWeight + titForTatWeight + cooperateWeight + defectWeight));
-            */
+
+            double sum = 0;
+            //sum += randomWeight * play(player1, new StrategyRandom())[0];
+            //sum += titForTatWeight * play(player1, new StrategyTitForTat())[0];
+            //sum += cooperateWeight * play(player1, new StrategyAlwaysCooperate())[0];
+            //sum += defectWeight * play(player1, new StrategyAlwaysDefect())[0];
+            //X.rawFitness += sum;
+
 
             // and play best found so far
             /*
@@ -58,28 +58,28 @@ public class PrisonersTournament extends FitnessFunction{
             X.rawFitness += bestFoundWeight * play(player1, player2);
             */
 
-
             // and play against everyone in the population
-            int individualSum = 0;
-            int combinedSum = 0;
+
+            double individualSum = 0;
+            double combinedSum = 0;
             for(Chromo c : Search.member){
                 StrategyMixed player3 = new StrategyMixed(iterationsRemembered);
                 player3.setStrategy(c.chromo);
-                int[] results = play(player1, player3);
+                double[] results = play(player1, player3);
                 individualSum += results[0];
                 combinedSum += results[1];
             }
+            X.rawFitness += individualSum / (double)Parameters.popSize;
+            X.combinedGameRawFitness += combinedSum / (double)Parameters.popSize;
 
-            X.rawFitness += Math.round(individualSum / (double)Parameters.popSize);
-            X.combinedGameRawFitness += Math.round(combinedSum / (double)Parameters.popSize);
 
             // Use this print statement to analyze the most frequently used(mode) strategy index.
             //System.out.println("suite iteration: " + i + " player1 mode strategy index: " + player1.getModeStrategyIndex());
         }
 
         // average across suite iteration
-        X.rawFitness = Math.round(X.rawFitness / (double)suiteIterations);
-        X.combinedGameRawFitness = Math.round(X.combinedGameRawFitness/ (double)suiteIterations);
+        X.rawFitness = X.rawFitness / (double)suiteIterations;
+        X.combinedGameRawFitness = X.combinedGameRawFitness / (double)suiteIterations;
 
         //System.out.println(player1.getModeStrategyIndex() + "\t\t\t" + player1.strategy[player1.getModeStrategyIndex()]);
     }
@@ -89,15 +89,14 @@ public class PrisonersTournament extends FitnessFunction{
     Returns an integer less than 100, giving the ratio of the points scored over the
     maximum number of number of points possible.
      */
-    private int[] play(Strategy p1, Strategy p2){
+    private double[] play(Strategy p1, Strategy p2){
         IteratedPD ipd = new IteratedPD(p1, p2);
         int iterations = Search.r.nextInt(maxNumberOfIterations) + 1;
-        //int iterations = 100;
+
         ipd.runSteps(iterations);
-        //return ipd.player1Score();
-        int[] results = new int[2];
-        results[0] = (int) (1000.00 * ((double)ipd.player1Score() / (double)(iterations * bestScorePossible)));
-        results[1] = (int) (1000.00 * ((double)(ipd.player1Score() + ipd.player2Score()) / (double)(iterations * bestCombinedScorePossible)));
+        double[] results = new double[2];
+        results[0] = ipd.player1Score() / (double)iterations;
+        results[1] = (ipd.player1Score() + ipd.player2Score()) / (double)iterations;
         return results;
     }
 

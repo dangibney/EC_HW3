@@ -225,18 +225,20 @@ public class Search {
                 );
 
 				// Output generation statistics to screen
-				System.out.println(R + "\t" + G +  "\t" + (int)bestOfGenChromo.rawFitness
+				System.out.println(R + "\t" + G +  "\t"
+                        + bestOfGenChromo.rawFitness
                         + "\t" + averageRawFitness
                         + "\t" + stdevRawFitness
-                        + "\t" + averageRawCombinedFitness
-                        + "\t" + stdevRawCombinedFitness);
+                        //+ "\t" + averageRawCombinedFitness
+                        //+ "\t" + stdevRawCombinedFitness
+                );
 
 				// Output generation statistics to summary file
 				summaryOutput.write(" R ");
 				Hwrite.right(R, 3, summaryOutput);
 				summaryOutput.write(" G ");
 				Hwrite.right(G, 3, summaryOutput);
-				Hwrite.right((int)bestOfGenChromo.rawFitness, 7, summaryOutput);
+				Hwrite.right(bestOfGenChromo.rawFitness, 11, 3, summaryOutput);
 				Hwrite.right(averageRawFitness, 11, 3, summaryOutput);
 				Hwrite.right(stdevRawFitness, 11, 3, summaryOutput);
 				summaryOutput.write("\n");
@@ -393,7 +395,7 @@ public class Search {
 
 			problem.doPrintGenes(bestOfRunChromo, summaryOutput);
 
-			System.out.println(R + "\t" + "B" + "\t"+ (int)bestOfRunChromo.rawFitness);
+			System.out.println(R + "\t" + "B" + "\t"+ bestOfRunChromo.rawFitness);
 
 		} //End of a Run
 
