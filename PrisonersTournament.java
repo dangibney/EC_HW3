@@ -95,8 +95,8 @@ public class PrisonersTournament extends FitnessFunction{
 
         ipd.runSteps(iterations);
         double[] results = new double[2];
-        results[0] = ipd.player1Score() / (double)iterations;
-        results[1] = (ipd.player1Score() + ipd.player2Score()) / (double)iterations;
+        results[0] = (ipd.player1Score() + ipd.player2Score()) / (double)iterations;
+        results[1] = ipd.player1Score() / (double)iterations;
         return results;
     }
 
