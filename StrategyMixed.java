@@ -136,4 +136,8 @@ public class StrategyMixed extends Strategy{
         }
         return topIndex;
     }
+
+    public int[] getStrategyIndexFrequencies(){
+        return Arrays.copyOf(strategyIndexFrequency, strategyIndexFrequency.length);
+    }
 }

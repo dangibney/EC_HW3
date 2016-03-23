@@ -1,4 +1,9 @@
+import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.concurrent.Semaphore;
 
 /**
  * Created by J on 3/8/2016.
@@ -40,25 +45,20 @@ public class PrisonersTournament extends FitnessFunction{
         StrategyMixed player1 = new StrategyMixed(iterationsRemembered);
         player1.setStrategy(X.chromo);
 
-        // tournament suite
+        // tournament suite - modify this for different tests
         for(int i = 0; i < suiteIterations; i++) {
 
             double sum = 0;
-            //sum += randomWeight * play(player1, new StrategyRandom())[0];
-            //sum += titForTatWeight * play(player1, new StrategyTitForTat())[0];
-            //sum += cooperateWeight * play(player1, new StrategyAlwaysCooperate())[0];
-            //sum += defectWeight * play(player1, new StrategyAlwaysDefect())[0];
-            //X.rawFitness += sum;
+            sum += randomWeight * play(player1, new StrategyRandom())[0];
+            sum += titForTatWeight * play(player1, new StrategyTitForTat())[0];
+            sum += titForTatWeight * play(player1, new StrategyTitForTwoTats())[0];
+            sum += cooperateWeight * play(player1, new StrategyAlwaysCooperate())[0];
+            sum += defectWeight * play(player1, new StrategyAlwaysDefect())[0];
+            X.rawFitness += sum /(randomWeight + titForTatWeight + 2*titForTatWeight + cooperateWeight + defectWeight + (double)Parameters.popSize);
 
-
-            // and play best found so far
-            /*
-            StrategyMixed player2 = new StrategyMixed(iterationsRemembered);
-            player2.setStrategy(Search.bestOfRunChromo.chromo);
-            X.rawFitness += bestFoundWeight * play(player1, player2);
-            */
 
             // and play against everyone in the population
+
 
             double individualSum = 0;
             double combinedSum = 0;
@@ -69,19 +69,28 @@ public class PrisonersTournament extends FitnessFunction{
                 individualSum += results[0];
                 combinedSum += results[1];
             }
-            X.rawFitness += individualSum / (double)Parameters.popSize;
+            //X.rawFitness += individualSum / (double)Parameters.popSize;
+            X.rawFitness += individualSum / (randomWeight + titForTatWeight + 2*titForTatWeight + cooperateWeight + defectWeight + (double)Parameters.popSize);
             X.combinedGameRawFitness += combinedSum / (double)Parameters.popSize;
 
 
             // Use this print statement to analyze the most frequently used(mode) strategy index.
             //System.out.println("suite iteration: " + i + " player1 mode strategy index: " + player1.getModeStrategyIndex());
+
+            //
         }
 
         // average across suite iteration
         X.rawFitness = X.rawFitness / (double)suiteIterations;
         X.combinedGameRawFitness = X.combinedGameRawFitness / (double)suiteIterations;
 
-        //System.out.println(player1.getModeStrategyIndex() + "\t\t\t" + player1.strategy[player1.getModeStrategyIndex()]);
+
+        // added to record index frequencies for analysis
+        int[] indexFreqs = player1.getStrategyIndexFrequencies();
+        for(int i = 0; i < indexFreqs.length; i++){
+            Search.indexFreq[Search.G][i] += indexFreqs[i];
+        }
+
     }
 
     /*

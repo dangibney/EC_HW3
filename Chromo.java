@@ -12,6 +12,8 @@ public class Chromo {
     public double rawFitness;
     public double sclFitness;
     public double proFitness;
+
+    // to store combined score of both players in game
     public double combinedGameRawFitness;
 
     private double mutationSD = .1;

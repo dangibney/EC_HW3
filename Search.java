@@ -61,6 +61,8 @@ public class Search {
 
 	private static double fitnessStats[][];  // 0=Avg, 1=Best
 
+    public static int indexFreq[][];
+
 /*******************************************************************************
 *                              CONSTRUCTORS                                    *
 *******************************************************************************/
@@ -103,6 +105,10 @@ public class Search {
         problem = new PrisonersTournament();
 
 		System.out.println(problem.name);
+
+        // for analysis of index
+        int numberOfStrategyIndex = 256;
+        indexFreq = new int[Parameters.generations][numberOfStrategyIndex];
 
 	//	Initialize RNG, array sizes and other objects
 		r.setSeed(Parameters.seed);
@@ -423,6 +429,22 @@ public class Search {
 
         System.out.println("Suggested Contest Entry: \n"+bestOverAllChromo);
 
+        // uncomment for strategy index analysis
+        /*
+        //System.out.println(player1.getModeStrategyIndex() + "\t\t\t" + player1.strategy[player1.getModeStrategyIndex()]);
+        try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("strategyIndex.txt", true)))) {
+            for(int gen = 0; gen < Parameters.generations; gen++) {
+                for(int i = 0; i < indexFreq[gen].length; i++){
+                    out.print(indexFreq[gen][i]);
+                    if(i < indexFreq[gen].length-1) {
+                        out.print(", ");
+                    }
+                }
+                out.print('\n');
+            }
+        }catch (IOException e) {
+        }
+        */
 	} // End of Main Class
 
 }   // End of Search.Java ******************************************************
